@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
+const validate = require('./middleware/validate');
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get('/api/health', (req, res) => {
         timestamp: new Date().toISOString(),
     });
 });
+
 
 // 404 — কোনো route match না হলে (সব route-এর পরে)
 app.use(notFound);
