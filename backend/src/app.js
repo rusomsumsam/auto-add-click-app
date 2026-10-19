@@ -2,12 +2,15 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 
+const notFound = require('./middleware/notFound');
+const errorHandler = require('./middleware/errorHandler');
+
 const app = express();
 
 // Security headers
 app.use(helmet());
 
-// CORS — শুধু অনুমোদিত origin থেকে
+// CORS
 const allowedOrigins = (process.env.CORS_ORIGINS || '')
     .split(',')
     .map((o) => o.trim())
@@ -39,18 +42,10 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({ status: 'error', message: 'Route not found' });
-});
+// 404 — কোনো route match না হলে (সব route-এর পরে)
+app.use(notFound);
 
-// Central error handler
-app.use((err, req, res, next) => {
-    console.error('[error]', err.message);
-    res.status(err.status || 500).json({
-        status: 'error',
-        message: err.message || 'Internal server error',
-    });
-});
+// Central error handler — সবার শেষে
+app.use(errorHandler);
 
 module.exports = app;
