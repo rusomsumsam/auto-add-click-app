@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 
+const { buildCorsOptions } = require('./config/cors');
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
 const validate = require('./middleware/validate');
@@ -11,24 +12,8 @@ const app = express();
 // Security headers
 app.use(helmet());
 
-// CORS
-const allowedOrigins = (process.env.CORS_ORIGINS || '')
-    .split(',')
-    .map((o) => o.trim())
-    .filter(Boolean);
-
-app.use(
-    cors({
-        origin: function (origin, callback) {
-            if (!origin) return callback(null, true);
-            if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-            return callback(new Error('Not allowed by CORS'));
-        },
-        credentials: true,
-    })
-);
+// CORS — src/config/cors.js
+app.use(cors(buildCorsOptions()));
 
 // Body parsers
 app.use(express.json({ limit: '1mb' }));
@@ -42,7 +27,6 @@ app.get('/api/health', (req, res) => {
         timestamp: new Date().toISOString(),
     });
 });
-
 
 // 404 — কোনো route match না হলে (সব route-এর পরে)
 app.use(notFound);
