@@ -1,28 +1,22 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthContext';
+import { theme } from '../theme';
 
 export default function DashboardScreen() {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Dashboard</Text>
             <Text style={styles.subtitle}>Welcome, {user?.name || 'User'}!</Text>
-            <Text style={styles.email}>{user?.email}</Text>
-
-            <TouchableOpacity style={styles.button} onPress={logout}>
-                <Text style={styles.buttonText}>Logout</Text>
-            </TouchableOpacity>
+            <Text style={styles.info}>Select a tab below to get started.</Text>
         </View>
     );
 }
-
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#f5f5f5' },
-    title: { fontSize: 32, fontWeight: 'bold', marginBottom: 10, color: '#333' },
-    subtitle: { fontSize: 20, marginBottom: 5, color: '#555' },
-    email: { fontSize: 16, color: '#888', marginBottom: 40 },
-    button: { backgroundColor: '#dc3545', padding: 15, borderRadius: 8, paddingHorizontal: 40 },
-    buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: theme.spacing.lg, backgroundColor: theme.colors.background },
+    title: { ...theme.typography.title, color: theme.colors.text, marginBottom: theme.spacing.sm },
+    subtitle: { ...theme.typography.subtitle, color: theme.colors.text, marginBottom: theme.spacing.lg },
+    info: { ...theme.typography.body, color: theme.colors.textLight },
 });
