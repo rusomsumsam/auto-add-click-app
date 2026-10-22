@@ -8,12 +8,15 @@ const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
 const validate = require('./middleware/validate');
 
+// ১. Routes ইমপোর্ট (নতুন)
+const routes = require('./routes');
+
 const app = express();
 
 // Express version লুকানো
 app.disable('x-powered-by');
 
-// Request ID — সবার আগে, যাতে সব log-এ থাকে
+// Request ID
 app.use(requestId);
 
 // Security headers
@@ -26,7 +29,7 @@ app.use(cors(buildCorsOptions()));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
-// Health check — Phase 21.8 monitoring-এর জন্য informative
+// Health check
 app.get('/api/health', (req, res) => {
     const mem = process.memoryUsage();
     res.json({
@@ -42,6 +45,9 @@ app.get('/api/health', (req, res) => {
         requestId: req.id,
     });
 });
+
+// ২. Routes যুক্ত করা (নতুন)
+app.use('/api', routes);
 
 // 404
 app.use(notFound);
