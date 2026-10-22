@@ -52,4 +52,23 @@ export const api = {
         }),
 
     getMe: () => request('/me'),
+
+    getProjects: () => request('/projects'),
+
+    createProject: (name, url, description) =>
+        request('/projects', {
+            method: 'POST',
+            body: JSON.stringify({ name, url, description }),
+        }),
+
+    updateProject: (id, data) =>
+        request(`/projects/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+        }),
+
+    deleteProject: (id) =>
+        request(`/projects/${id}`, {
+            method: 'DELETE',
+        }),
 };
