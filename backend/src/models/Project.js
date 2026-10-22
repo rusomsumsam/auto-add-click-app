@@ -48,8 +48,6 @@ const projectSchema = new mongoose.Schema(
     }
 );
 
-// Index for fast lookup by user and name
-projectSchema.index({ user: 1, name: 1 });
 // Ensure unique project name per user
 projectSchema.index({ user: 1, name: 1 }, { unique: true });
 
