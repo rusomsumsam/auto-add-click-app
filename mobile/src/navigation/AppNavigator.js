@@ -14,6 +14,7 @@ import ProjectsScreen from '../screens/ProjectsScreen';
 import ProvidersScreen from '../screens/ProvidersScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CreateProjectScreen from '../screens/CreateProjectScreen';
+import DeviceSelectionScreen from './../screens/DeviceSelectionScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,6 +65,7 @@ export default function AppNavigator() {
                     <>
                         <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
                         <Stack.Screen name="CreateProject" component={CreateProjectScreen} options={{ title: 'New Project' }} />
+                        <Stack.Screen name="DeviceSelection" component={DeviceSelectionScreen} options={{ title: 'Select Devices' }} />
                     </>
                 ) : (
                     <>

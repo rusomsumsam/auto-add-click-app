@@ -71,4 +71,9 @@ export const api = {
         request(`/projects/${id}`, {
             method: 'DELETE',
         }),
+    
+    getDevices: (platform = '') => {
+        const query = platform ? `?platform=${platform}` : '';
+        return request(`/devices${query}`);
+    },
 };
