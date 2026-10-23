@@ -1,6 +1,7 @@
 const express = require('express');
 const authRoute = require('./auth.route');
-const projectRoute = require('./project.route'); // নতুন
+const projectRoute = require('./project.route');
+const deviceRoute = require('./device.route');
 const userController = require('../controllers/userController');
 const requireAuth = require('../middleware/requireAuth');
 const { authLimiter, generalLimiter } = require('../middleware/rateLimit');
@@ -14,7 +15,10 @@ router.use(generalLimiter);
 router.use('/auth', authLimiter, authRoute);
 
 // Project routes
-router.use('/projects', projectRoute); // নতুন
+router.use('/projects', projectRoute);
+
+// Device routes
+router.use('/devices', deviceRoute);
 
 // User routes
 router.get('/me', requireAuth, userController.getMe);
