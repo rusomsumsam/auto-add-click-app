@@ -88,4 +88,15 @@ export const api = {
     getTestResults: (id) => request(`/test-runs/${id}/results`),
 
     getTestRuns: () => request('/test-runs'),
+
+    getProviders: () => request('/providers'),
+    connectProvider: (provider, accountLabel, credentials) =>
+        request(`/providers/${provider}/connect`, {
+            method: 'POST',
+            body: JSON.stringify({ accountLabel, credentials }),
+        }),
+    disconnectProvider: (provider) =>
+        request(`/providers/${provider}/disconnect`, {
+            method: 'DELETE',
+        }),
 };
