@@ -57,12 +57,28 @@ export default function DeviceSelectionScreen({ navigation }) {
         setSelectedDevices([]);
     };
 
-    const handleStartTest = () => {
+    const handleStartTest = async () => {
         if (selectedDevices.length === 0) {
             return Alert.alert('Error', 'Please select at least one device');
         }
-        // পরের Phase-এ আমরা এখানে Test Runner স্ক্রিনে পাঠাব
-        Alert.alert('Selected', `${selectedDevices.length} device(s) selected.`);
+
+        // এখানে আপনার একটি প্রজেক্ট লাগবে। ইউজারকে প্রজেক্ট বেছে নিতে বলব।
+        try {
+            const data = await api.getProjects();
+            if (data.projects.length === 0) {
+                return Alert.alert('Error', 'Please create a project first');
+            }
+
+            // আপাতত প্রথম প্রজেক্টটি ব্যবহার করছি
+            // Phase 15-এ ইউজারকে প্রজেক্ট বেছে নিতে দেব
+            const projectId = data.projects[0]._id;
+
+            const response = await api.createTestRun(projectId, selectedDevices);
+
+            navigation.navigate('TestProgress', { testRunId: response.testRun.id });
+        } catch (error) {
+            Alert.alert('Failed', error.message);
+        }
     };
 
     if (isLoading) {

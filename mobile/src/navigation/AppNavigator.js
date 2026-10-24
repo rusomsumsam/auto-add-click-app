@@ -15,6 +15,7 @@ import ProvidersScreen from '../screens/ProvidersScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CreateProjectScreen from '../screens/CreateProjectScreen';
 import DeviceSelectionScreen from './../screens/DeviceSelectionScreen';
+import TestProgressScreen from '../screens/TestProgressScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -66,6 +67,7 @@ export default function AppNavigator() {
                         <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
                         <Stack.Screen name="CreateProject" component={CreateProjectScreen} options={{ title: 'New Project' }} />
                         <Stack.Screen name="DeviceSelection" component={DeviceSelectionScreen} options={{ title: 'Select Devices' }} />
+                        <Stack.Screen name="TestProgress" component={TestProgressScreen} options={{ title: 'Test Progress', headerBackVisible: false }} />
                     </>
                 ) : (
                     <>

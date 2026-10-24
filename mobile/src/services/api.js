@@ -76,4 +76,14 @@ export const api = {
         const query = platform ? `?platform=${platform}` : '';
         return request(`/devices${query}`);
     },
+
+    createTestRun: (projectId, deviceIds) =>
+        request('/test-runs', {
+            method: 'POST',
+            body: JSON.stringify({ projectId, deviceIds }),
+        }),
+
+    getTestRun: (id) => request(`/test-runs/${id}`),
+
+    getTestResults: (id) => request(`/test-runs/${id}/results`),
 };
