@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { api } from '../services/api';
 import { theme } from '../theme';
@@ -57,7 +57,7 @@ export default function TestProgressScreen({ route, navigation }) {
         : 0;
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 26 }}>
             {/* Status Header */}
             <View style={styles.header}>
                 <Ionicons
@@ -135,7 +135,7 @@ export default function TestProgressScreen({ route, navigation }) {
                     <Text style={styles.doneText}>Back to Dashboard</Text>
                 </TouchableOpacity>
             )}
-        </View>
+        </ScrollView>
     );
 }
 
