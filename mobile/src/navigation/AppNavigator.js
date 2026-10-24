@@ -16,6 +16,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import CreateProjectScreen from '../screens/CreateProjectScreen';
 import DeviceSelectionScreen from './../screens/DeviceSelectionScreen';
 import TestProgressScreen from '../screens/TestProgressScreen';
+import TestHistoryScreen from '../screens/TestHistoryScreen';
+import TestReportScreen from '../screens/TestReportScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -34,6 +36,8 @@ function MainTabs() {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === 'Projects') {
                         iconName = focused ? 'folder' : 'folder-outline';
+                    } else if (route.name === 'History') {
+                        iconName = focused ? 'time' : 'time-outline'; // নতুন যোগ করা হলো
                     } else if (route.name === 'Providers') {
                         iconName = focused ? 'server' : 'server-outline';
                     } else if (route.name === 'Settings') {
@@ -46,6 +50,7 @@ function MainTabs() {
         >
             <Tab.Screen name="Dashboard" component={DashboardScreen} />
             <Tab.Screen name="Projects" component={ProjectsScreen} />
+            <Tab.Screen name="History" component={TestHistoryScreen} />
             <Tab.Screen name="Providers" component={ProvidersScreen} />
             <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
@@ -67,6 +72,7 @@ export default function AppNavigator() {
                         <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
                         <Stack.Screen name="CreateProject" component={CreateProjectScreen} options={{ title: 'New Project' }} />
                         <Stack.Screen name="DeviceSelection" component={DeviceSelectionScreen} options={{ title: 'Select Devices' }} />
+                        <Stack.Screen name="TestReport" component={TestReportScreen} options={{ title: 'Test Report' }} />
                         <Stack.Screen name="TestProgress" component={TestProgressScreen} options={{ title: 'Test Progress', headerBackVisible: false }} />
                     </>
                 ) : (

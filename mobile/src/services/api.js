@@ -86,4 +86,6 @@ export const api = {
     getTestRun: (id) => request(`/test-runs/${id}`),
 
     getTestResults: (id) => request(`/test-runs/${id}/results`),
+
+    getTestRuns: () => request('/test-runs'),
 };
