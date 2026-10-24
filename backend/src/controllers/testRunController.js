@@ -2,6 +2,7 @@ const TestRun = require('../models/TestRun');
 const Project = require('../models/Project');
 const DeviceProfile = require('../models/DeviceProfile');
 const { testQueue } = require('../services/testQueue');
+const { validateUrlForTesting } = require('../middleware/ssrfProtection'); // নতুন যোগ করা হলো
 
 // POST /api/test-runs
 async function createTestRun(req, res, next) {
@@ -17,7 +18,16 @@ async function createTestRun(req, res, next) {
             });
         }
 
-        // ২. ডিভাইসগুলো যাচাই
+        // ২. প্রজেক্টের URL আবার SSRF চেক দিয়ে যাচাই করা (Defense in Depth)
+        const urlCheck = validateUrlForTesting(project.url);
+        if (!urlCheck.ok) {
+            return res.status(400).json({
+                status: 'error',
+                message: `Project URL rejected: ${urlCheck.reason}`,
+            });
+        }
+
+        // ৩. ডিভাইসগুলো যাচাই
         const devices = await DeviceProfile.find({ _id: { $in: deviceIds }, isActive: true });
         if (devices.length !== deviceIds.length) {
             return res.status(400).json({
@@ -26,7 +36,7 @@ async function createTestRun(req, res, next) {
             });
         }
 
-        // ৩. TestRun তৈরি
+        // ৪. TestRun তৈরি
         const testRun = await TestRun.create({
             user: req.user._id,
             project: project._id,
@@ -34,7 +44,7 @@ async function createTestRun(req, res, next) {
             status: 'queued',
         });
 
-        // ৪. প্রতিটি ডিভাইসের জন্য Job Queue-তে যোগ
+        // ৫. প্রতিটি ডিভাইসের জন্য Job Queue-তে যোগ
         for (const device of devices) {
             await testQueue.add(
                 'test-website',
@@ -44,15 +54,15 @@ async function createTestRun(req, res, next) {
                     url: project.url,
                 },
                 {
-                    attempts: 2, // সর্বোচ্চ ২ বার চেষ্টা
-                    backoff: { type: 'exponential', delay: 5000 }, // ব্যর্থ হলে ৫ সেকেন্ড পর আবার
+                    attempts: 2,
+                    backoff: { type: 'exponential', delay: 5000 },
                     removeOnComplete: 100,
                     removeOnFail: 100,
                 }
             );
         }
 
-        // ৫. Status আপডেট → running
+        // ৬. Status আপডেট → running
         testRun.status = 'running';
         testRun.startedAt = new Date();
         await testRun.save();
